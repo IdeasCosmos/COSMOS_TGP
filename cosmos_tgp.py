@@ -55,37 +55,62 @@ def text_to_path(input_text, front_id="F"):
     return path
 
 
+def path_to_hex(path):
+    """
+    Converts a path of quadrant integers into a compact hexadecimal string.
+
+    Args:
+        path (list[int]): A list of integers (0-3) representing the path.
+
+    Returns:
+        str: A hexadecimal string representing the coordinate.
+    """
+    # Convert the list of integers (0-3) into a single binary string.
+    # Each integer is represented by 2 bits.
+    binary_string = "".join([format(p, '02b') for p in path])
+
+    # Pad the binary string with trailing zeros to make its length a multiple of 4,
+    # so it can be neatly converted to hex.
+    while len(binary_string) % 4 != 0:
+        binary_string += "0"
+
+    # Convert the binary string to an integer, then format it as a hex string.
+    # The '0x' prefix is removed for a cleaner output.
+    hex_coordinate = hex(int(binary_string, 2))[2:]
+
+    return hex_coordinate
+
+
 if __name__ == "__main__":
     # --- 개념 증명을 위한 데모 ---
-    print("COSMOS TGP: 개념 증명 데모")
+    print("COSMOS TGP: 개념 증명 데모 (Hex Coordinate)")
     print("-" * 40)
 
-    # 1. "Apple" 텍스트에 대한 경로 생성
+    # 1. "Apple" 텍스트에 대한 경로 및 해시 생성
     text_apple = "Apple"
     path_apple = text_to_path(text_apple, front_id="A")
+    hex_apple = path_to_hex(path_apple)
 
     print(f"입력 텍스트: '{text_apple}' (Front ID: 'A')")
-    print(f"생성된 경로: {path_apple}")
+    print(f"생성된 경로 (일부): {path_apple[:12]}...")
+    print(f"최종 좌표 (Hex): {hex_apple}")
     print("-" * 40)
 
     # 2. 작은 변화에 대한 민감도 테스트
-    # 글자 하나만 달라도 경로가 달라지는 것을 보여줍니다.
     text_appld = "Appld"
     path_appld = text_to_path(text_appld, front_id="A")
+    hex_appld = path_to_hex(path_appld)
 
     text_applf = "Applf"
     path_applf = text_to_path(text_applf, front_id="A")
+    hex_applf = path_to_hex(path_applf)
 
     print("입력값 민감도 테스트:")
-    print(f"입력 텍스트: '{text_appld}'")
-    print(f"생성된 경로: {path_appld}")
-    print()
-    print(f"입력 텍스트: '{text_applf}'")
-    print(f"생성된 경로: {path_applf}")
+    print(f"입력: '{text_appld}' -> 좌표: {hex_appld}")
+    print(f"입력: '{text_applf}' -> 좌표: {hex_applf}")
     print("-" * 40)
 
     # 3. 경로 비교
-    # 'Appl'까지는 경로가 동일해야 합니다.
     common_prefix_len = 0
     for i in range(min(len(path_apple), len(path_appld))):
         if path_apple[i] == path_appld[i]:
@@ -94,4 +119,4 @@ if __name__ == "__main__":
             break
 
     print(f"'Apple'과 'Appld'의 경로는 첫 {common_prefix_len} 단계까지 동일합니다.")
-    print("이후 마지막 문자인 'e'와 'd'에서 경로가 달라집니다.")
+    print("이후 마지막 문자인 'e'와 'd'에서 경로가 달라져 좌표 전체가 바뀝니다.")
