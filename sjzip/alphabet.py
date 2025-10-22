@@ -38,7 +38,8 @@ _ALPHABET: List[str] = [chr(0)]
 _seen = set(_ALPHABET)
 
 for char in _BASE_PRINTABLE + _KOREAN_CHARS + _EXTRA_CHARS:
-    if char not in _seen:
+    # Ensure only single characters are added
+    if len(char) == 1 and char not in _seen:
         _ALPHABET.append(char)
         _seen.add(char)
 
