@@ -1,0 +1,62 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sjzip"
+version = "2.0.0"
+description = "Secure text compression system using 3D spiral space mapping"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Multibus TGP Team", email = "info@multibus-tgp.org"}
+]
+keywords = ["compression", "text", "spiral", "3d", "security"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: System :: Archiving :: Compression",
+]
+
+dependencies = [
+    "numpy>=1.24.0,<2.0.0",
+    "pandas>=2.0.0,<3.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.5.0",
+    "bandit>=1.7.5",
+]
+
+[project.urls]
+Homepage = "https://github.com/IdeasCosmos/COSMOS_TGP"
+Repository = "https://github.com/IdeasCosmos/COSMOS_TGP"
+Issues = "https://github.com/IdeasCosmos/COSMOS_TGP/issues"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --cov=sjzip --cov-report=html --cov-report=term"
+
+[tool.black]
+line-length = 100
+target-version = ['py38', 'py39', 'py310', 'py311']
+include = '\.pyi?$'
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+
+[tool.bandit]
+exclude_dirs = ["tests", "docs"]
+skips = ["B101"]  # Allow assert in tests
